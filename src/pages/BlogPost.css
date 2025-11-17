@@ -157,9 +157,12 @@
 
 .post-navigation {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   gap: 32px;
-  margin-top: 80px;
+  width: 100%;
+  max-width: 960px;
+  margin: 80px auto 0;
   padding-top: 36px;
   border-top: 1px solid var(--border-color-light);
 }
@@ -258,7 +261,8 @@
   }
 
   .post-navigation {
-    gap: 24px;
+    gap: 32px;
+    padding: 0 12px;
     margin-top: 56px;
   }
 }
@@ -317,7 +321,9 @@
   }
 
   .post-navigation {
+    justify-content: center;
     gap: 20px;
+    padding: 0;
     margin-top: 48px;
   }
 
