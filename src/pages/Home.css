@@ -91,8 +91,12 @@
   .post-meta {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 16px;
+  }
+
+  .post-meta-info {
+    flex-wrap: wrap;
   }
 
   .post-title {
@@ -123,8 +127,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   margin-bottom: 20px;
   font-size: 13px;
+}
+
+.post-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
 }
 
 .post-category {
@@ -140,6 +152,16 @@
 .post-date {
   color: var(--text-secondary);
   font-size: 13px;
+}
+
+.post-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.post-views .material-icons {
+  font-size: 16px;
 }
 
 .post-title {

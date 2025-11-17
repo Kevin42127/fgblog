@@ -35,7 +35,15 @@ export default function Home() {
               <article key={post.id} className="post-card">
                 <div className="post-meta">
                   <span className="post-category">{post.category}</span>
-                  <span className="post-date">{formatDate(post.createdAt)}</span>
+                  <div className="post-meta-info">
+                    <span className="post-date">{formatDate(post.createdAt)}</span>
+                    {post.viewCount !== undefined && post.viewCount > 0 && (
+                      <span className="post-views">
+                        <span className="material-icons">visibility</span>
+                        {post.viewCount} 次瀏覽
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <h2 className="post-title">
                   <Link to={`/post/${post.id}`}>{post.title}</Link>
