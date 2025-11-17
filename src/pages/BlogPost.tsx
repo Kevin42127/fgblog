@@ -77,28 +77,34 @@ export default function BlogPost() {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
-      {(previousPost || nextPost) && (
-        <div className="post-navigation">
-          {previousPost && (
-            <Link
-              to={`/post/${previousPost.id}`}
-              className="nav-circle prev"
-              aria-label={`上一篇：${previousPost.title}`}
-            >
-              <span className="material-icons">arrow_back</span>
-            </Link>
-          )}
-          {nextPost && (
-            <Link
-              to={`/post/${nextPost.id}`}
-              className="nav-circle next"
-              aria-label={`下一篇：${nextPost.title}`}
-            >
-              <span className="material-icons">arrow_forward</span>
-            </Link>
-          )}
-        </div>
-      )}
+      <div className="post-navigation">
+        {previousPost ? (
+          <Link
+            to={`/post/${previousPost.id}`}
+            className="nav-circle prev"
+            aria-label={`上一篇：${previousPost.title}`}
+          >
+            <span className="material-icons">arrow_back</span>
+          </Link>
+        ) : (
+          <div className="nav-circle disabled prev" aria-hidden="true">
+            <span className="material-icons">arrow_back</span>
+          </div>
+        )}
+        {nextPost ? (
+          <Link
+            to={`/post/${nextPost.id}`}
+            className="nav-circle next"
+            aria-label={`下一篇：${nextPost.title}`}
+          >
+            <span className="material-icons">arrow_forward</span>
+          </Link>
+        ) : (
+          <div className="nav-circle disabled next" aria-hidden="true">
+            <span className="material-icons">arrow_forward</span>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

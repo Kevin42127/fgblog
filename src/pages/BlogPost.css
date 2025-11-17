@@ -178,6 +178,12 @@
   transition: var(--transition);
 }
 
+.nav-circle.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  border-style: dashed;
+}
+
 .nav-circle .material-icons {
   font-size: 28px;
 }
