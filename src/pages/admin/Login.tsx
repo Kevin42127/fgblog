@@ -22,9 +22,8 @@ export default function Login() {
     e.preventDefault()
     setIsLoading(true)
 
-    setTimeout(() => {
-      const success = login(username, password)
-      setIsLoading(false)
+    try {
+      const success = await login(username, password)
 
       if (success) {
         showNotification({
@@ -38,7 +37,14 @@ export default function Login() {
           message: '帳號或密碼錯誤'
         })
       }
-    }, 300)
+    } catch (error) {
+      showNotification({
+        type: 'error',
+        message: '登入失敗，請稍後再試'
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
