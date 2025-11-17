@@ -25,287 +25,254 @@ interface BlogContextType {
   posts: Post[]
   categories: string[]
   contactMessages: ContactMessage[]
-  loadPosts: () => void
-  loadCategories: () => void
-  loadContactMessages: () => void
-  addPost: (post: Post) => void
-  updatePost: (id: string, post: Partial<Post>) => void
-  deletePost: (id: string) => void
-  deleteAllPosts: () => void
-  addCategory: (category: string) => void
-  deleteCategory: (category: string) => void
-  deleteAllCategories: () => void
-  addContactMessage: (message: Omit<ContactMessage, 'id' | 'createdAt' | 'read'>) => void
-  markContactMessageAsRead: (id: string) => void
-  deleteContactMessage: (id: string) => void
-  deleteAllContactMessages: () => void
+  loadPosts: () => Promise<void>
+  loadCategories: () => Promise<void>
+  loadContactMessages: () => Promise<void>
+  addPost: (post: Post) => Promise<void>
+  updatePost: (id: string, post: Partial<Post>) => Promise<void>
+  deletePost: (id: string) => Promise<void>
+  deleteAllPosts: () => Promise<void>
+  addCategory: (category: string) => Promise<void>
+  deleteCategory: (category: string) => Promise<void>
+  deleteAllCategories: () => Promise<void>
+  addContactMessage: (message: Omit<ContactMessage, 'id' | 'createdAt' | 'read'>) => Promise<void>
+  markContactMessageAsRead: (id: string) => Promise<void>
+  deleteContactMessage: (id: string) => Promise<void>
+  deleteAllContactMessages: () => Promise<void>
   getPostById: (id: string) => Post | undefined
-  incrementViewCount: (id: string) => void
+  incrementViewCount: (id: string) => Promise<void>
 }
 
 const BlogContext = createContext<BlogContextType | undefined>(undefined)
 
-const STORAGE_KEYS = {
-  POSTS: 'blogPosts',
-  CATEGORIES: 'blogCategories',
-  CONTACT_MESSAGES: 'blogContactMessages'
-}
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
 
 export function BlogProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([])
 
-  const loadPosts = useCallback(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.POSTS)
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        setPosts(parsed.sort((a: Post, b: Post) => 
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        ))
-      } catch (error) {
-        console.error('Failed to load posts:', error)
-        setPosts([])
-      }
-    } else {
+  const loadPosts = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts`)
+      if (!response.ok) throw new Error('Failed to fetch posts')
+      const data = await response.json()
+      setPosts(data.sort((a: Post, b: Post) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      ))
+    } catch (error) {
+      console.error('Failed to load posts:', error)
       setPosts([])
     }
   }, [])
 
-  const loadCategories = useCallback(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CATEGORIES)
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        setCategories(parsed)
-      } catch (error) {
-        console.error('Failed to load categories:', error)
-        setCategories([])
-      }
-    } else {
+  const loadCategories = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories`)
+      if (!response.ok) throw new Error('Failed to fetch categories')
+      const data = await response.json()
+      setCategories(data)
+    } catch (error) {
+      console.error('Failed to load categories:', error)
       setCategories([])
     }
   }, [])
 
-
-  const addPost = useCallback((post: Post) => {
-    setPosts(currentPosts => {
-      const newPosts = [...currentPosts, post]
-      try {
-        localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(newPosts))
-        window.dispatchEvent(new CustomEvent('blogPostsUpdated'))
-      } catch (error) {
-        console.error('Failed to save posts:', error)
-      }
-      return newPosts.sort((a: Post, b: Post) => 
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
-    })
-  }, [])
-
-  const updatePost = useCallback((id: string, updatedPost: Partial<Post>) => {
-    setPosts(currentPosts => {
-      const newPosts = currentPosts.map(post => 
-        post.id === id ? { ...post, ...updatedPost } : post
-      )
-      try {
-        localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(newPosts))
-        window.dispatchEvent(new CustomEvent('blogPostsUpdated'))
-      } catch (error) {
-        console.error('Failed to save posts:', error)
-      }
-      return newPosts.sort((a: Post, b: Post) => 
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
-    })
-  }, [])
-
-  const deletePost = useCallback((id: string) => {
-    setPosts(currentPosts => {
-      const newPosts = currentPosts.filter(post => post.id !== id)
-      try {
-        localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(newPosts))
-        window.dispatchEvent(new CustomEvent('blogPostsUpdated'))
-      } catch (error) {
-        console.error('Failed to save posts:', error)
-      }
-      return newPosts.sort((a: Post, b: Post) => 
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
-    })
-  }, [])
-
-  const deleteAllPosts = useCallback(() => {
-    setPosts([])
+  const loadContactMessages = useCallback(async () => {
     try {
-      localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify([]))
-      window.dispatchEvent(new CustomEvent('blogPostsUpdated'))
+      const response = await fetch(`${API_BASE_URL}/contacts`)
+      if (!response.ok) throw new Error('Failed to fetch contact messages')
+      const data = await response.json()
+      setContactMessages(data.sort((a: ContactMessage, b: ContactMessage) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      ))
     } catch (error) {
-      console.error('Failed to save posts:', error)
-    }
-  }, [])
-
-  const addCategory = useCallback((category: string) => {
-    setCategories(currentCategories => {
-      if (!currentCategories.includes(category)) {
-        const newCategories = [...currentCategories, category]
-        try {
-          localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(newCategories))
-          window.dispatchEvent(new CustomEvent('blogCategoriesUpdated'))
-        } catch (error) {
-          console.error('Failed to save categories:', error)
-        }
-        return newCategories
-      }
-      return currentCategories
-    })
-  }, [])
-
-  const deleteCategory = useCallback((category: string) => {
-    setCategories(currentCategories => {
-      const newCategories = currentCategories.filter(cat => cat !== category)
-      try {
-        localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(newCategories))
-        window.dispatchEvent(new CustomEvent('blogCategoriesUpdated'))
-      } catch (error) {
-        console.error('Failed to save categories:', error)
-      }
-      return newCategories
-    })
-  }, [])
-
-  const deleteAllCategories = useCallback(() => {
-    setCategories([])
-    try {
-      localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify([]))
-      window.dispatchEvent(new CustomEvent('blogCategoriesUpdated'))
-    } catch (error) {
-      console.error('Failed to save categories:', error)
-    }
-  }, [])
-
-  const loadContactMessages = useCallback(() => {
-    const saved = localStorage.getItem(STORAGE_KEYS.CONTACT_MESSAGES)
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved)
-        setContactMessages(parsed.sort((a: ContactMessage, b: ContactMessage) => 
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        ))
-      } catch (error) {
-        console.error('Failed to load contact messages:', error)
-        setContactMessages([])
-      }
-    } else {
+      console.error('Failed to load contact messages:', error)
       setContactMessages([])
     }
   }, [])
 
-  const addContactMessage = useCallback((message: Omit<ContactMessage, 'id' | 'createdAt' | 'read'>) => {
-    const newMessage: ContactMessage = {
-      ...message,
-      id: Math.random().toString(36).substr(2, 9),
-      createdAt: new Date().toISOString(),
-      read: false
-    }
-    setContactMessages(currentMessages => {
-      const newMessages = [newMessage, ...currentMessages]
-      try {
-        localStorage.setItem(STORAGE_KEYS.CONTACT_MESSAGES, JSON.stringify(newMessages))
-        window.dispatchEvent(new CustomEvent('blogContactMessagesUpdated'))
-      } catch (error) {
-        console.error('Failed to save contact messages:', error)
-      }
-      return newMessages
-    })
-  }, [])
-
-  const markContactMessageAsRead = useCallback((id: string) => {
-    setContactMessages(currentMessages => {
-      const newMessages = currentMessages.map(msg => 
-        msg.id === id ? { ...msg, read: true } : msg
-      )
-      try {
-        localStorage.setItem(STORAGE_KEYS.CONTACT_MESSAGES, JSON.stringify(newMessages))
-        window.dispatchEvent(new CustomEvent('blogContactMessagesUpdated'))
-      } catch (error) {
-        console.error('Failed to save contact messages:', error)
-      }
-      return newMessages
-    })
-  }, [])
-
-  const deleteContactMessage = useCallback((id: string) => {
-    setContactMessages(currentMessages => {
-      const newMessages = currentMessages.filter(msg => msg.id !== id)
-      try {
-        localStorage.setItem(STORAGE_KEYS.CONTACT_MESSAGES, JSON.stringify(newMessages))
-        window.dispatchEvent(new CustomEvent('blogContactMessagesUpdated'))
-      } catch (error) {
-        console.error('Failed to save contact messages:', error)
-      }
-      return newMessages
-    })
-  }, [])
-
-  const deleteAllContactMessages = useCallback(() => {
-    setContactMessages([])
+  const addPost = useCallback(async (post: Post) => {
     try {
-      localStorage.setItem(STORAGE_KEYS.CONTACT_MESSAGES, JSON.stringify([]))
-      window.dispatchEvent(new CustomEvent('blogContactMessagesUpdated'))
+      const response = await fetch(`${API_BASE_URL}/posts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(post)
+      })
+      if (!response.ok) throw new Error('Failed to create post')
+      await loadPosts()
     } catch (error) {
-      console.error('Failed to save contact messages:', error)
+      console.error('Failed to add post:', error)
+      throw error
     }
-  }, [])
+  }, [loadPosts])
+
+  const updatePost = useCallback(async (id: string, updatedPost: Partial<Post>) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, ...updatedPost })
+      })
+      if (!response.ok) throw new Error('Failed to update post')
+      await loadPosts()
+    } catch (error) {
+      console.error('Failed to update post:', error)
+      throw error
+    }
+  }, [loadPosts])
+
+  const deletePost = useCallback(async (id: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts?id=${id}`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Failed to delete post')
+      await loadPosts()
+    } catch (error) {
+      console.error('Failed to delete post:', error)
+      throw error
+    }
+  }, [loadPosts])
+
+  const deleteAllPosts = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/delete-all`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Failed to delete all posts')
+      await loadPosts()
+    } catch (error) {
+      console.error('Failed to delete all posts:', error)
+      throw error
+    }
+  }, [loadPosts])
+
+  const addCategory = useCallback(async (category: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: category })
+      })
+      if (!response.ok) throw new Error('Failed to create category')
+      await loadCategories()
+    } catch (error) {
+      console.error('Failed to add category:', error)
+      throw error
+    }
+  }, [loadCategories])
+
+  const deleteCategory = useCallback(async (category: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories?name=${encodeURIComponent(category)}`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Failed to delete category')
+      await loadCategories()
+    } catch (error) {
+      console.error('Failed to delete category:', error)
+      throw error
+    }
+  }, [loadCategories])
+
+  const deleteAllCategories = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/categories/delete-all`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Failed to delete all categories')
+      await loadCategories()
+    } catch (error) {
+      console.error('Failed to delete all categories:', error)
+      throw error
+    }
+  }, [loadCategories])
+
+  const addContactMessage = useCallback(async (message: Omit<ContactMessage, 'id' | 'createdAt' | 'read'>) => {
+    try {
+      const newMessage = {
+        ...message,
+        id: Math.random().toString(36).substr(2, 9),
+        createdAt: new Date().toISOString(),
+        read: false
+      }
+      const response = await fetch(`${API_BASE_URL}/contacts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newMessage)
+      })
+      if (!response.ok) throw new Error('Failed to create contact message')
+      await loadContactMessages()
+    } catch (error) {
+      console.error('Failed to add contact message:', error)
+      throw error
+    }
+  }, [loadContactMessages])
+
+  const markContactMessageAsRead = useCallback(async (id: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/contacts`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, read: true })
+      })
+      if (!response.ok) throw new Error('Failed to update contact message')
+      await loadContactMessages()
+    } catch (error) {
+      console.error('Failed to mark contact message as read:', error)
+      throw error
+    }
+  }, [loadContactMessages])
+
+  const deleteContactMessage = useCallback(async (id: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/contacts?id=${id}`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Failed to delete contact message')
+      await loadContactMessages()
+    } catch (error) {
+      console.error('Failed to delete contact message:', error)
+      throw error
+    }
+  }, [loadContactMessages])
+
+  const deleteAllContactMessages = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/contacts/delete-all`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Failed to delete all contact messages')
+      await loadContactMessages()
+    } catch (error) {
+      console.error('Failed to delete all contact messages:', error)
+      throw error
+    }
+  }, [loadContactMessages])
 
   const getPostById = useCallback((id: string) => {
     return posts.find(post => post.id === id)
   }, [posts])
 
-  const incrementViewCount = useCallback((id: string) => {
-    setPosts(currentPosts => {
-      const newPosts = currentPosts.map(post => {
-        if (post.id === id) {
-          return {
-            ...post,
-            viewCount: (post.viewCount || 0) + 1
-          }
-        }
-        return post
+  const incrementViewCount = useCallback(async (id: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/increment-view`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
       })
-      try {
-        localStorage.setItem(STORAGE_KEYS.POSTS, JSON.stringify(newPosts))
-        window.dispatchEvent(new CustomEvent('blogPostsUpdated'))
-      } catch (error) {
-        console.error('Failed to save posts:', error)
-      }
-      return newPosts
-    })
-  }, [])
+      if (!response.ok) throw new Error('Failed to increment view count')
+      await loadPosts()
+    } catch (error) {
+      console.error('Failed to increment view count:', error)
+    }
+  }, [loadPosts])
 
   useEffect(() => {
     loadPosts()
     loadCategories()
     loadContactMessages()
-
-    const handleStorageChange = () => {
-      loadPosts()
-      loadCategories()
-      loadContactMessages()
-    }
-
-    window.addEventListener('storage', handleStorageChange)
-    window.addEventListener('blogPostsUpdated', handleStorageChange)
-    window.addEventListener('blogCategoriesUpdated', handleStorageChange)
-    window.addEventListener('blogContactMessagesUpdated', handleStorageChange)
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      window.removeEventListener('blogPostsUpdated', handleStorageChange)
-      window.removeEventListener('blogCategoriesUpdated', handleStorageChange)
-      window.removeEventListener('blogContactMessagesUpdated', handleStorageChange)
-    }
   }, [loadPosts, loadCategories, loadContactMessages])
 
   return (
@@ -342,4 +309,3 @@ export function useBlog() {
   }
   return context
 }
-

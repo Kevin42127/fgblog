@@ -9,19 +9,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     loadPosts()
     loadCategories()
-    
-    const handleUpdate = () => {
-      loadPosts()
-      loadCategories()
-    }
-
-    window.addEventListener('blogPostsUpdated', handleUpdate)
-    window.addEventListener('blogCategoriesUpdated', handleUpdate)
-    
-    return () => {
-      window.removeEventListener('blogPostsUpdated', handleUpdate)
-      window.removeEventListener('blogCategoriesUpdated', handleUpdate)
-    }
   }, [loadPosts, loadCategories])
 
   const recentPosts = posts.slice(0, 5)

@@ -13,7 +13,7 @@ export default function Contact() {
   const { showNotification } = useNotification()
   const { addContactMessage } = useBlog()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
@@ -24,17 +24,24 @@ export default function Contact() {
       return
     }
 
-    addContactMessage(formData)
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    })
-    showNotification({
-      type: 'success',
-      message: '訊息已送出，我們會盡快回覆您'
-    })
+    try {
+      await addContactMessage(formData)
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      })
+      showNotification({
+        type: 'success',
+        message: '訊息已送出，我們會盡快回覆您'
+      })
+    } catch (error) {
+      showNotification({
+        type: 'error',
+        message: '訊息送出失敗，請稍後再試'
+      })
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

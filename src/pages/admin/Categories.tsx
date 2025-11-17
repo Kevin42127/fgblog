@@ -12,19 +12,9 @@ export default function AdminCategories() {
 
   useEffect(() => {
     loadCategories()
-    
-    const handleUpdate = () => {
-      loadCategories()
-    }
-
-    window.addEventListener('blogCategoriesUpdated', handleUpdate)
-    
-    return () => {
-      window.removeEventListener('blogCategoriesUpdated', handleUpdate)
-    }
   }, [loadCategories])
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!newCategory.trim()) {
       showNotification({
         type: 'error',
@@ -41,12 +31,19 @@ export default function AdminCategories() {
       return
     }
 
-    addCategory(newCategory.trim())
-    setNewCategory('')
-    showNotification({
-      type: 'success',
-      message: '分類已新增'
-    })
+    try {
+      await addCategory(newCategory.trim())
+      setNewCategory('')
+      showNotification({
+        type: 'success',
+        message: '分類已新增'
+      })
+    } catch (error) {
+      showNotification({
+        type: 'error',
+        message: '操作失敗，請稍後再試'
+      })
+    }
   }
 
   const handleDelete = async (category: string) => {
@@ -57,11 +54,18 @@ export default function AdminCategories() {
       cancelText: '取消'
     })
     if (result) {
-      deleteCategory(category)
-      showNotification({
-        type: 'success',
-        message: '分類已刪除'
-      })
+      try {
+        await deleteCategory(category)
+        showNotification({
+          type: 'success',
+          message: '分類已刪除'
+        })
+      } catch (error) {
+        showNotification({
+          type: 'error',
+          message: '操作失敗，請稍後再試'
+        })
+      }
     }
   }
 
@@ -80,11 +84,18 @@ export default function AdminCategories() {
       cancelText: '取消'
     })
     if (result) {
-      deleteAllCategories()
-      showNotification({
-        type: 'success',
-        message: '所有分類已刪除'
-      })
+      try {
+        await deleteAllCategories()
+        showNotification({
+          type: 'success',
+          message: '所有分類已刪除'
+        })
+      } catch (error) {
+        showNotification({
+          type: 'error',
+          message: '操作失敗，請稍後再試'
+        })
+      }
     }
   }
 

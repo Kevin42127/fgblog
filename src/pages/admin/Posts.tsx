@@ -12,16 +12,6 @@ export default function AdminPosts() {
 
   useEffect(() => {
     loadPosts()
-    
-    const handleUpdate = () => {
-      loadPosts()
-    }
-
-    window.addEventListener('blogPostsUpdated', handleUpdate)
-    
-    return () => {
-      window.removeEventListener('blogPostsUpdated', handleUpdate)
-    }
   }, [loadPosts])
 
   const handleDelete = async (id: string) => {
@@ -32,11 +22,18 @@ export default function AdminPosts() {
       cancelText: '取消'
     })
     if (result) {
-      deletePost(id)
-      showNotification({
-        type: 'success',
-        message: '文章已刪除'
-      })
+      try {
+        await deletePost(id)
+        showNotification({
+          type: 'success',
+          message: '文章已刪除'
+        })
+      } catch (error) {
+        showNotification({
+          type: 'error',
+          message: '操作失敗，請稍後再試'
+        })
+      }
     }
   }
 
@@ -55,11 +52,18 @@ export default function AdminPosts() {
       cancelText: '取消'
     })
     if (result) {
-      deleteAllPosts()
-      showNotification({
-        type: 'success',
-        message: '所有文章已刪除'
-      })
+      try {
+        await deleteAllPosts()
+        showNotification({
+          type: 'success',
+          message: '所有文章已刪除'
+        })
+      } catch (error) {
+        showNotification({
+          type: 'error',
+          message: '操作失敗，請稍後再試'
+        })
+      }
     }
   }
 

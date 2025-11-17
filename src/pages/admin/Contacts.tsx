@@ -11,24 +11,21 @@ export default function AdminContacts() {
 
   useEffect(() => {
     loadContactMessages()
-    
-    const handleUpdate = () => {
-      loadContactMessages()
-    }
-
-    window.addEventListener('blogContactMessagesUpdated', handleUpdate)
-    
-    return () => {
-      window.removeEventListener('blogContactMessagesUpdated', handleUpdate)
-    }
   }, [loadContactMessages])
 
-  const handleRead = (id: string) => {
-    markContactMessageAsRead(id)
-    showNotification({
-      type: 'success',
-      message: '已標記為已讀'
-    })
+  const handleRead = async (id: string) => {
+    try {
+      await markContactMessageAsRead(id)
+      showNotification({
+        type: 'success',
+        message: '已標記為已讀'
+      })
+    } catch (error) {
+      showNotification({
+        type: 'error',
+        message: '操作失敗，請稍後再試'
+      })
+    }
   }
 
   const handleDelete = async (id: string) => {
@@ -39,11 +36,18 @@ export default function AdminContacts() {
       cancelText: '取消'
     })
     if (result) {
-      deleteContactMessage(id)
-      showNotification({
-        type: 'success',
-        message: '訊息已刪除'
-      })
+      try {
+        await deleteContactMessage(id)
+        showNotification({
+          type: 'success',
+          message: '訊息已刪除'
+        })
+      } catch (error) {
+        showNotification({
+          type: 'error',
+          message: '操作失敗，請稍後再試'
+        })
+      }
     }
   }
 
@@ -62,11 +66,18 @@ export default function AdminContacts() {
       cancelText: '取消'
     })
     if (result) {
-      deleteAllContactMessages()
-      showNotification({
-        type: 'success',
-        message: '所有訊息已刪除'
-      })
+      try {
+        await deleteAllContactMessages()
+        showNotification({
+          type: 'success',
+          message: '所有訊息已刪除'
+        })
+      } catch (error) {
+        showNotification({
+          type: 'error',
+          message: '操作失敗，請稍後再試'
+        })
+      }
     }
   }
 

@@ -91,27 +91,61 @@ api/
 
 ## 資料儲存
 
-目前使用瀏覽器的 localStorage 儲存資料，包含：
-- 文章資料 (`blogPosts`)
-- 分類資料 (`blogCategories`)
-- 聯絡訊息 (`blogContactMessages`)
+專案使用 **Vercel Postgres**（Neon Serverless Postgres）資料庫儲存所有資料，實現跨裝置同步和資料持久化。
 
-## 後端驗證
+### Vercel Postgres 設置
 
-專案使用 Vercel Serverless Functions 實現後端驗證：
+1. **在 Vercel 中建立 Postgres 資料庫**
+   - 前往 Vercel 專案設置
+   - 點擊 "Storage" 標籤
+   - 選擇 "Create Database" → "Postgres"
+   - 選擇 "Neon" 作為提供者（推薦）
+   - 建立資料庫後，Vercel 會自動設置 `POSTGRES_URL` 環境變數
+
+2. **或使用 Neon 直接建立**
+   - 前往 [Neon](https://neon.tech)
+   - 建立免費帳號和專案
+   - 複製連線字串（格式：`postgresql://user:password@host/database`）
+   - 在 Vercel 環境變數中設置 `POSTGRES_URL`
 
 ### 環境變量設置（Vercel）
 
 在 Vercel 專案設置中添加以下環境變量：
 
+**資料庫設定：**
+- `POSTGRES_URL` - PostgreSQL 連線字串（必填，Vercel 建立資料庫後會自動設置）
+
+**後端驗證：**
 - `ADMIN_USERNAME` - 後台管理帳號（預設：admin）
 - `ADMIN_PASSWORD` - 後台管理密碼（請設置強密碼）
-- `JWT_SECRET` - JWT 簽名密鑰（請使用強隨機字符串）
+- `JWT_SECRET` - JWT 簽名密鑰（請使用強隨機字符串，最多 32 字元）
 
 ### API 端點
 
+**認證相關：**
 - `POST /api/login` - 登入驗證
 - `GET /api/verify` - Token 驗證
+
+**文章管理：**
+- `GET /api/posts` - 取得所有文章
+- `POST /api/posts` - 新增文章
+- `PUT /api/posts` - 更新文章
+- `DELETE /api/posts?id={id}` - 刪除文章
+- `DELETE /api/posts/delete-all` - 刪除所有文章
+- `POST /api/posts/increment-view` - 增加瀏覽數
+
+**分類管理：**
+- `GET /api/categories` - 取得所有分類
+- `POST /api/categories` - 新增分類
+- `DELETE /api/categories?name={name}` - 刪除分類
+- `DELETE /api/categories/delete-all` - 刪除所有分類
+
+**聯絡訊息：**
+- `GET /api/contacts` - 取得所有聯絡訊息
+- `POST /api/contacts` - 新增聯絡訊息
+- `PUT /api/contacts` - 更新聯絡訊息（標記已讀）
+- `DELETE /api/contacts?id={id}` - 刪除聯絡訊息
+- `DELETE /api/contacts/delete-all` - 刪除所有聯絡訊息
 
 ### 本地開發
 

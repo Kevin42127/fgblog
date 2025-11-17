@@ -8,16 +8,6 @@ export default function Home() {
 
   useEffect(() => {
     loadPosts()
-    
-    const handleUpdate = () => {
-      loadPosts()
-    }
-
-    window.addEventListener('blogPostsUpdated', handleUpdate)
-    
-    return () => {
-      window.removeEventListener('blogPostsUpdated', handleUpdate)
-    }
   }, [loadPosts])
 
   const formatDate = (dateString: string) => {

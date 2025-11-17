@@ -41,7 +41,7 @@ export default function AdminPostEditor() {
     }
   }, [id, getPostById, loadCategories])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
     if (!post.title || !post.content || !post.category) {
@@ -52,30 +52,36 @@ export default function AdminPostEditor() {
       return
     }
     
-    if (id) {
-      updatePost(id, {
-        ...post,
-        author: post.author || '開發者'
-      })
-      showNotification({
-        type: 'success',
-        message: '文章已更新'
-      })
-    } else {
-      const newPost: Post = {
-        ...post as Post,
-        id: Math.random().toString(36).substr(2, 9),
-        author: post.author || '開發者',
-        createdAt: new Date().toISOString()
+    try {
+      if (id) {
+        await updatePost(id, {
+          ...post,
+          author: post.author || '開發者'
+        })
+        showNotification({
+          type: 'success',
+          message: '文章已更新'
+        })
+      } else {
+        const newPost: Post = {
+          ...post as Post,
+          id: Math.random().toString(36).substr(2, 9),
+          author: post.author || '開發者',
+          createdAt: new Date().toISOString()
+        }
+        await addPost(newPost)
+        showNotification({
+          type: 'success',
+          message: '文章已建立'
+        })
       }
-      addPost(newPost)
+      navigate('/admin/posts')
+    } catch (error) {
       showNotification({
-        type: 'success',
-        message: '文章已建立'
+        type: 'error',
+        message: '操作失敗，請稍後再試'
       })
     }
-
-    navigate('/admin/posts')
   }
 
   const handleContentChange = (content: string) => {

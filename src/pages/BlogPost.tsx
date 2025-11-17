@@ -11,16 +11,6 @@ export default function BlogPost() {
 
   useEffect(() => {
     loadPosts()
-    
-    const handleUpdate = () => {
-      loadPosts()
-    }
-
-    window.addEventListener('blogPostsUpdated', handleUpdate)
-    
-    return () => {
-      window.removeEventListener('blogPostsUpdated', handleUpdate)
-    }
   }, [loadPosts])
 
   useEffect(() => {
@@ -29,7 +19,7 @@ export default function BlogPost() {
 
   useEffect(() => {
     if (id && post && !hasIncremented.current) {
-      incrementViewCount(id)
+      incrementViewCount(id).catch(console.error)
       hasIncremented.current = true
     }
   }, [id, post, incrementViewCount])
