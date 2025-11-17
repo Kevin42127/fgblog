@@ -1,0 +1,187 @@
+.post-editor {
+  max-width: 1200px;
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-header h1 {
+  font-size: 32px;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.editor-form {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 32px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--primary-color);
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-color);
+  background: var(--bg-color);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #000000;
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.quill {
+  background: var(--bg-color);
+}
+
+.ql-container {
+  font-size: 16px;
+  min-height: 300px;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.ql-editor {
+  min-height: 300px;
+  color: var(--text-color);
+}
+
+.ql-toolbar {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-bottom: none;
+}
+
+.ql-toolbar .ql-stroke {
+  stroke: var(--text-color);
+}
+
+.ql-toolbar .ql-fill {
+  fill: var(--text-color);
+}
+
+.ql-toolbar .ql-picker-label {
+  color: var(--text-color);
+}
+
+.ql-toolbar .ql-picker-options {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.ql-toolbar button:hover,
+.ql-toolbar button:focus,
+.ql-toolbar button.ql-active {
+  color: var(--primary-color);
+}
+
+.ql-toolbar button:hover .ql-stroke,
+.ql-toolbar button:focus .ql-stroke,
+.ql-toolbar button.ql-active .ql-stroke {
+  stroke: var(--primary-color);
+}
+
+.ql-toolbar button:hover .ql-fill,
+.ql-toolbar button:focus .ql-fill,
+.ql-toolbar button.ql-active .ql-fill {
+  fill: var(--primary-color);
+}
+
+.ql-container {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border-top: none;
+}
+
+.ql-editor.ql-blank::before {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  font-style: normal;
+}
+
+.ql-snow .ql-picker {
+  color: var(--text-color);
+}
+
+.ql-snow .ql-picker-options {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.ql-snow .ql-picker-item {
+  color: var(--text-color);
+}
+
+.ql-snow .ql-picker-item:hover {
+  color: var(--primary-color);
+  background: var(--bg-tertiary);
+}
+

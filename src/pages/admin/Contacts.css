@@ -1,0 +1,198 @@
+.admin-contacts {
+  max-width: 1200px;
+}
+
+.page-header {
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-header h1 {
+  font-size: 36px;
+  color: var(--primary-color);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.unread-badge {
+  display: inline-block;
+  background: var(--error-color);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 12px;
+}
+
+.btn-delete-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--error-color);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-delete-all:hover {
+  opacity: 0.9;
+}
+
+.btn-delete-all .material-icons {
+  font-size: 18px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 100px 20px;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+}
+
+.empty-state p {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-item {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-item.unread {
+  border-left: 4px solid var(--primary-color);
+  background: var(--bg-secondary);
+}
+
+.contact-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 20px;
+}
+
+.contact-sender h3 {
+  font-size: 18px;
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.contact-email {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.contact-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.contact-date {
+  font-size: 13px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.unread-indicator {
+  display: inline-block;
+  background: var(--primary-color);
+  color: #000000;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.contact-subject {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  color: var(--text-color);
+}
+
+.contact-subject strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.contact-message {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  color: var(--text-color);
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-mark-read,
+.btn-delete {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-mark-read {
+  background: var(--bg-secondary);
+  color: var(--text-color);
+  border: 1px solid var(--border-color-light);
+}
+
+.btn-mark-read:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+.btn-delete {
+  background: var(--error-color);
+  color: #ffffff;
+}
+
+.btn-delete:hover {
+  opacity: 0.9;
+}
+

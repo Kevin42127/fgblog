@@ -1,0 +1,133 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
+.admin-sidebar {
+  width: 260px;
+  background: var(--bg-color);
+  border-right: 1px solid var(--border-color-light);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-header {
+  padding: 28px 20px;
+  border-bottom: 1px solid var(--border-color-light);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-header .material-icons {
+  font-size: 28px;
+  color: var(--primary-color);
+}
+
+.sidebar-header h2 {
+  font-size: 20px;
+  color: var(--primary-color);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: var(--transition);
+  border-left: 3px solid transparent;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.nav-item .material-icons {
+  font-size: 20px;
+}
+
+.nav-item:hover {
+  background: var(--bg-secondary);
+  border-left-color: var(--primary-color);
+}
+
+.nav-item.active {
+  background: var(--bg-secondary);
+  border-left-color: var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.sidebar-footer {
+  padding: 24px 20px;
+  border-top: 1px solid var(--border-color-light);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.back-link:hover {
+  color: var(--primary-color);
+}
+
+.back-link .material-icons {
+  font-size: 18px;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-sm);
+  color: var(--error-color);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.logout-button:hover {
+  background: var(--bg-secondary);
+  border-color: var(--error-color);
+}
+
+.logout-button .material-icons {
+  font-size: 18px;
+}
+
+.admin-main {
+  flex: 1;
+  padding: 48px;
+  overflow-y: auto;
+}
+
+
