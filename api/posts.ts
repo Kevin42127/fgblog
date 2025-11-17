@@ -56,7 +56,7 @@ export default async function handler(
         viewCount: updateData.viewCount ?? currentPost[0].viewCount
       }
 
-      const result = await sql`
+      await sql`
         UPDATE posts 
         SET 
           title = ${updatedPost.title},
@@ -81,10 +81,11 @@ export default async function handler(
       if (!id || typeof id !== 'string') {
         return res.status(400).json({ error: 'Post ID is required' })
       }
-      const result = await sql`DELETE FROM posts WHERE id = ${id}`
-      if (result.rowCount === 0) {
+      const existing = await sql`SELECT id FROM posts WHERE id = ${id}`
+      if (existing.length === 0) {
         return res.status(404).json({ error: 'Post not found' })
       }
+      await sql`DELETE FROM posts WHERE id = ${id}`
       return res.status(200).json({ success: true })
     } catch (error) {
       console.error('Failed to delete post:', error)

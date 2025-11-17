@@ -46,10 +46,11 @@ export default async function handler(
       if (!name || typeof name !== 'string') {
         return res.status(400).json({ error: 'Category name is required' })
       }
-      const result = await sql`DELETE FROM categories WHERE name = ${name}`
-      if (result.rowCount === 0) {
+      const existing = await sql`SELECT name FROM categories WHERE name = ${name}`
+      if (existing.length === 0) {
         return res.status(404).json({ error: 'Category not found' })
       }
+      await sql`DELETE FROM categories WHERE name = ${name}`
       return res.status(200).json({ success: true })
     } catch (error) {
       console.error('Failed to delete category:', error)

@@ -11,8 +11,8 @@ export default async function handler(
 
   try {
     await initDatabase()
-    const result = await sql`DELETE FROM categories`
-    return res.status(200).json({ success: true, deletedCount: result.rowCount || 0 })
+    await sql`DELETE FROM categories`
+    return res.status(200).json({ success: true })
   } catch (error) {
     console.error('Failed to delete all categories:', error)
     return res.status(500).json({ error: 'Failed to delete all categories' })

@@ -55,7 +55,7 @@ export default async function handler(
         message: updateData.message ?? currentMessage[0].message
       }
 
-      const result = await sql`
+      await sql`
         UPDATE contacts 
         SET 
           read = ${updatedMessage.read},
@@ -79,10 +79,11 @@ export default async function handler(
       if (!id || typeof id !== 'string') {
         return res.status(400).json({ error: 'Contact message ID is required' })
       }
-      const result = await sql`DELETE FROM contacts WHERE id = ${id}`
-      if (result.rowCount === 0) {
+      const existing = await sql`SELECT id FROM contacts WHERE id = ${id}`
+      if (existing.length === 0) {
         return res.status(404).json({ error: 'Contact message not found' })
       }
+      await sql`DELETE FROM contacts WHERE id = ${id}`
       return res.status(200).json({ success: true })
     } catch (error) {
       console.error('Failed to delete contact message:', error)
