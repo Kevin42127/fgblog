@@ -105,7 +105,7 @@ export default function AdminPostEditor() {
             <label htmlFor="category">分類 *</label>
             <CustomSelect
               id="category"
-              value={post.category}
+              value={post.category || ''}
               onChange={(value) => setPost({ ...post, category: value })}
               options={[
                 { value: '', label: '選擇分類' },
