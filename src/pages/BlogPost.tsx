@@ -78,7 +78,7 @@ export default function BlogPost() {
         />
       </article>
       {(previousPost || nextPost) && (
-        <div className="post-navigation compact">
+        <div className="post-navigation">
           {previousPost && (
             <Link
               to={`/post/${previousPost.id}`}
