@@ -1,11 +1,11 @@
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useEffect, useRef } from 'react'
 import { useBlog } from '../contexts/BlogContext'
 import './BlogPost.css'
 
 export default function BlogPost() {
   const { id } = useParams<{ id: string }>()
-  const { getPostById, loadPosts, incrementViewCount } = useBlog()
+  const { posts, getPostById, loadPosts, incrementViewCount } = useBlog()
   const post = id ? getPostById(id) : undefined
   const hasIncremented = useRef(false)
 
@@ -38,6 +38,14 @@ export default function BlogPost() {
     )
   }
 
+  const currentIndex = posts.findIndex(item => item.id === post.id)
+  const previousPost = currentIndex !== -1 && currentIndex < posts.length - 1
+    ? posts[currentIndex + 1]
+    : undefined
+  const nextPost = currentIndex > 0
+    ? posts[currentIndex - 1]
+    : undefined
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('zh-TW', {
@@ -69,6 +77,28 @@ export default function BlogPost() {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
+      {(previousPost || nextPost) && (
+        <div className="post-navigation">
+          {previousPost && (
+            <Link to={`/post/${previousPost.id}`} className="nav-link prev">
+              <span className="material-icons">arrow_back</span>
+              <div className="nav-text">
+                <span className="nav-label">上一篇</span>
+                <p className="nav-title">{previousPost.title}</p>
+              </div>
+            </Link>
+          )}
+          {nextPost && (
+            <Link to={`/post/${nextPost.id}`} className="nav-link next">
+              <div className="nav-text">
+                <span className="nav-label">下一篇</span>
+                <p className="nav-title">{nextPost.title}</p>
+              </div>
+              <span className="material-icons">arrow_forward</span>
+            </Link>
+          )}
+        </div>
+      )}
     </div>
   )
 }
