@@ -78,22 +78,22 @@ export default function BlogPost() {
         />
       </article>
       {(previousPost || nextPost) && (
-        <div className="post-navigation">
+        <div className="post-navigation compact">
           {previousPost && (
-            <Link to={`/post/${previousPost.id}`} className="nav-link prev">
+            <Link
+              to={`/post/${previousPost.id}`}
+              className="nav-circle prev"
+              aria-label={`上一篇：${previousPost.title}`}
+            >
               <span className="material-icons">arrow_back</span>
-              <div className="nav-text">
-                <span className="nav-label">上一篇</span>
-                <p className="nav-title">{previousPost.title}</p>
-              </div>
             </Link>
           )}
           {nextPost && (
-            <Link to={`/post/${nextPost.id}`} className="nav-link next">
-              <div className="nav-text">
-                <span className="nav-label">下一篇</span>
-                <p className="nav-title">{nextPost.title}</p>
-              </div>
+            <Link
+              to={`/post/${nextPost.id}`}
+              className="nav-circle next"
+              aria-label={`下一篇：${nextPost.title}`}
+            >
               <span className="material-icons">arrow_forward</span>
             </Link>
           )}
