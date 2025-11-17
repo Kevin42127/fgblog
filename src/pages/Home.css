@@ -126,7 +126,7 @@
 .post-meta {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   margin-bottom: 20px;
   font-size: 13px;
@@ -135,11 +135,16 @@
 .post-meta-info {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
   gap: 12px;
+  row-gap: 6px;
   color: var(--text-secondary);
 }
 
 .post-category {
+  display: inline-flex;
+  align-items: center;
   background: var(--bg-secondary);
   padding: 5px 14px;
   border-radius: var(--radius-sm);
@@ -147,6 +152,7 @@
   font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.02em;
+  line-height: 1;
 }
 
 .post-date {
