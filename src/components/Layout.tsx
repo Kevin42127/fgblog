@@ -59,11 +59,10 @@ export default function Layout() {
               href="https://www.dcard.tw/@abc_0"
               target="_blank"
               rel="noopener noreferrer"
-              className="social-link"
+              className="nav-social-link"
               onClick={closeMenu}
             >
-              <span className="material-icons" aria-hidden="true">share</span>
-              <span>Dcard</span>
+              Dcard
             </a>
           </nav>
         </div>
@@ -73,9 +72,11 @@ export default function Layout() {
       </main>
       <footer className="footer">
         <div className="container">
-          <p>
-            <span>©</span> FG_飛龍
-          </p>
+          <div className="footer-content">
+            <p>
+              <span>©</span> FG_飛龍
+            </p>
+          </div>
         </div>
       </footer>
       <ScrollToTop />
