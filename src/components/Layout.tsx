@@ -64,15 +64,6 @@ export default function Layout() {
             >
               Dcard
             </a>
-            <a
-              href="https://github.com/Kevin42127/fgblog"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="nav-social-link"
-              onClick={closeMenu}
-            >
-              GitHub
-            </a>
           </nav>
         </div>
       </header>
