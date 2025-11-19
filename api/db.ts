@@ -34,22 +34,6 @@ export async function initDatabase() {
         read BOOLEAN DEFAULT FALSE
       )
     `
-
-    await sql`
-      CREATE TABLE IF NOT EXISTS announcements (
-        id VARCHAR(255) PRIMARY KEY,
-        title TEXT NOT NULL,
-        message TEXT NOT NULL,
-        "startAt" TIMESTAMP NOT NULL,
-        "endAt" TIMESTAMP,
-        "isActive" BOOLEAN DEFAULT TRUE,
-        "isBanner" BOOLEAN DEFAULT TRUE,
-        priority INTEGER DEFAULT 0,
-        theme VARCHAR(32) DEFAULT 'accent',
-        "createdAt" TIMESTAMP NOT NULL,
-        "updatedAt" TIMESTAMP NOT NULL
-      )
-    `
   } catch (error) {
     console.error('Failed to initialize database:', error)
   }

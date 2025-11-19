@@ -1,7 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react'
 
-type AnnouncementTheme = 'accent' | 'success' | 'warning' | 'info'
-
 interface Post {
   id: string
   title: string
@@ -23,31 +21,13 @@ interface ContactMessage {
   read: boolean
 }
 
-export interface Announcement {
-  id: string
-  title: string
-  message: string
-  startAt: string
-  endAt: string | null
-  isActive: boolean
-  isBanner: boolean
-  priority: number
-  theme: AnnouncementTheme
-  createdAt: string
-  updatedAt: string
-}
-
-export type AnnouncementInput = Omit<Announcement, 'id' | 'createdAt' | 'updatedAt'>
-
 interface BlogContextType {
   posts: Post[]
   categories: string[]
   contactMessages: ContactMessage[]
-  announcements: Announcement[]
   loadPosts: () => Promise<void>
   loadCategories: () => Promise<void>
   loadContactMessages: () => Promise<void>
-  loadAnnouncements: () => Promise<void>
   addPost: (post: Post) => Promise<void>
   updatePost: (id: string, post: Partial<Post>) => Promise<void>
   deletePost: (id: string) => Promise<void>
@@ -59,10 +39,6 @@ interface BlogContextType {
   markContactMessageAsRead: (id: string) => Promise<void>
   deleteContactMessage: (id: string) => Promise<void>
   deleteAllContactMessages: () => Promise<void>
-  addAnnouncement: (announcement: AnnouncementInput) => Promise<void>
-  updateAnnouncement: (id: string, announcement: Partial<AnnouncementInput>) => Promise<void>
-  deleteAnnouncement: (id: string) => Promise<void>
-  deleteAllAnnouncements: () => Promise<void>
   getPostById: (id: string) => Post | undefined
   incrementViewCount: (id: string) => Promise<void>
 }
@@ -70,20 +46,11 @@ interface BlogContextType {
 const BlogContext = createContext<BlogContextType | undefined>(undefined)
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
-const ANNOUNCEMENT_API_URL = `${API_BASE_URL}/announcements`
-
-const getGeneratedId = () => {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID()
-  }
-  return Math.random().toString(36).substring(2, 11)
-}
 
 export function BlogProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([])
-  const [announcements, setAnnouncements] = useState<Announcement[]>([])
 
   const loadPosts = useCallback(async () => {
     try {
@@ -122,18 +89,6 @@ export function BlogProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Failed to load contact messages:', error)
       setContactMessages([])
-    }
-  }, [])
-
-  const loadAnnouncements = useCallback(async () => {
-    try {
-      const response = await fetch(ANNOUNCEMENT_API_URL)
-      if (!response.ok) throw new Error('Failed to fetch announcements')
-      const data = await response.json()
-      setAnnouncements(data)
-    } catch (error) {
-      console.error('Failed to load announcements:', error)
-      setAnnouncements([])
     }
   }, [])
 
@@ -296,74 +251,6 @@ export function BlogProvider({ children }: { children: ReactNode }) {
     }
   }, [loadContactMessages])
 
-  const addAnnouncement = useCallback(async (announcement: AnnouncementInput) => {
-    try {
-      const now = new Date().toISOString()
-      const payload = {
-        ...announcement,
-        id: getGeneratedId(),
-        createdAt: now,
-        updatedAt: now
-      }
-      const response = await fetch(ANNOUNCEMENT_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      if (!response.ok) throw new Error('Failed to create announcement')
-      await loadAnnouncements()
-    } catch (error) {
-      console.error('Failed to add announcement:', error)
-      throw error
-    }
-  }, [loadAnnouncements])
-
-  const updateAnnouncement = useCallback(async (id: string, announcement: Partial<AnnouncementInput>) => {
-    try {
-      const payload = {
-        id,
-        ...announcement,
-        updatedAt: new Date().toISOString()
-      }
-      const response = await fetch(ANNOUNCEMENT_API_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      if (!response.ok) throw new Error('Failed to update announcement')
-      await loadAnnouncements()
-    } catch (error) {
-      console.error('Failed to update announcement:', error)
-      throw error
-    }
-  }, [loadAnnouncements])
-
-  const deleteAnnouncement = useCallback(async (id: string) => {
-    try {
-      const response = await fetch(`${ANNOUNCEMENT_API_URL}?id=${id}`, {
-        method: 'DELETE'
-      })
-      if (!response.ok) throw new Error('Failed to delete announcement')
-      await loadAnnouncements()
-    } catch (error) {
-      console.error('Failed to delete announcement:', error)
-      throw error
-    }
-  }, [loadAnnouncements])
-
-  const deleteAllAnnouncements = useCallback(async () => {
-    try {
-      const response = await fetch(`${ANNOUNCEMENT_API_URL}/delete-all`, {
-        method: 'DELETE'
-      })
-      if (!response.ok) throw new Error('Failed to delete announcements')
-      await loadAnnouncements()
-    } catch (error) {
-      console.error('Failed to delete all announcements:', error)
-      throw error
-    }
-  }, [loadAnnouncements])
-
   const getPostById = useCallback((id: string) => {
     return posts.find(post => post.id === id)
   }, [posts])
@@ -386,19 +273,16 @@ export function BlogProvider({ children }: { children: ReactNode }) {
     loadPosts()
     loadCategories()
     loadContactMessages()
-    loadAnnouncements()
-  }, [loadPosts, loadCategories, loadContactMessages, loadAnnouncements])
+  }, [loadPosts, loadCategories, loadContactMessages])
 
   return (
     <BlogContext.Provider value={{
       posts,
       categories,
       contactMessages,
-      announcements,
       loadPosts,
       loadCategories,
       loadContactMessages,
-      loadAnnouncements,
       addPost,
       updatePost,
       deletePost,
@@ -410,10 +294,6 @@ export function BlogProvider({ children }: { children: ReactNode }) {
       markContactMessageAsRead,
       deleteContactMessage,
       deleteAllContactMessages,
-      addAnnouncement,
-      updateAnnouncement,
-      deleteAnnouncement,
-      deleteAllAnnouncements,
       getPostById,
       incrementViewCount
     }}>

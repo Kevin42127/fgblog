@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Outlet, Link } from 'react-router-dom'
 import ScrollToTop from './ScrollToTop'
-import AnnouncementBanner from './AnnouncementBanner'
 import './Layout.css'
 
 export default function Layout() {
@@ -37,7 +36,6 @@ export default function Layout() {
 
   return (
     <div className="layout">
-      <AnnouncementBanner />
       <header className="header">
         <div className="container">
           <Link to="/" className="logo" onClick={closeMenu}>

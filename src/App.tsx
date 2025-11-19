@@ -13,7 +13,6 @@ import AdminPosts from './pages/admin/Posts'
 import AdminPostEditor from './pages/admin/PostEditor'
 import AdminCategories from './pages/admin/Categories'
 import AdminContacts from './pages/admin/Contacts'
-import AdminAnnouncements from './pages/admin/Announcements'
 import Login from './pages/admin/Login'
 import { NotificationProvider } from './contexts/NotificationContext'
 import { AuthProvider } from './contexts/AuthContext'
@@ -53,7 +52,6 @@ function App() {
                 <Route path="posts/edit/:id" element={<AdminPostEditor />} />
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="contacts" element={<AdminContacts />} />
-                <Route path="announcements" element={<AdminAnnouncements />} />
                 <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
