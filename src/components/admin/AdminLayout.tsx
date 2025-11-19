@@ -32,7 +32,7 @@ export default function AdminLayout() {
         <nav className="sidebar-nav">
           <Link 
             to="/admin" 
-            className={`nav-item ${isActive('/admin') && !isActive('/admin/posts') && !isActive('/admin/categories') && !isActive('/admin/contacts') ? 'active' : ''}`}
+            className={`nav-item ${isActive('/admin') && !isActive('/admin/posts') && !isActive('/admin/categories') && !isActive('/admin/contacts') && !isActive('/admin/announcements') ? 'active' : ''}`}
           >
             <span>儀表板</span>
           </Link>
@@ -47,6 +47,12 @@ export default function AdminLayout() {
             className={`nav-item ${isActive('/admin/categories') ? 'active' : ''}`}
           >
             <span>分類管理</span>
+          </Link>
+          <Link 
+            to="/admin/announcements" 
+            className={`nav-item ${isActive('/admin/announcements') ? 'active' : ''}`}
+          >
+            <span>公告管理</span>
           </Link>
           <Link 
             to="/admin/contacts" 

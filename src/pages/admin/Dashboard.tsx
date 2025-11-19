@@ -4,14 +4,24 @@ import { useBlog } from '../../contexts/BlogContext'
 import './Dashboard.css'
 
 export default function AdminDashboard() {
-  const { posts, categories, loadPosts, loadCategories } = useBlog()
+  const { posts, categories, announcements, loadPosts, loadCategories, loadAnnouncements } = useBlog()
 
   useEffect(() => {
     loadPosts()
     loadCategories()
-  }, [loadPosts, loadCategories])
+    loadAnnouncements()
+  }, [loadPosts, loadCategories, loadAnnouncements])
 
   const recentPosts = posts.slice(0, 5)
+  const activeAnnouncements = announcements.filter((item) => {
+    if (!item.isActive || !item.isBanner) return false
+    const now = Date.now()
+    const start = new Date(item.startAt).getTime()
+    const end = item.endAt ? new Date(item.endAt).getTime() : null
+    if (start > now) return false
+    if (end && end < now) return false
+    return true
+  }).length
 
   return (
     <div className="dashboard">
@@ -29,6 +39,12 @@ export default function AdminDashboard() {
           <div className="stat-content">
             <h3>分類數</h3>
             <p className="stat-number">{categories.length}</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-content">
+            <h3>啟用公告</h3>
+            <p className="stat-number">{activeAnnouncements}</p>
           </div>
         </div>
       </div>
